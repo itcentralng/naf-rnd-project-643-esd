@@ -28,7 +28,9 @@ def get_all_units():
 def single_unit(id):
     unit = Unit.get_by_id(id)
     personnels = User.get_all_by_unit_id(id)
-    return render_template('single-unit.html', unit=unit, personnels=personnels)
+    locations = Location.get_all()
+    commands = Command.get_all()
+    return render_template('single-unit.html', unit=unit, personnels=personnels, locations=locations, commands=commands)
 
 @bp.put('/unit/<int:id>')
 def update_unit(id):

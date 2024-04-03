@@ -3,6 +3,8 @@ from datetime import datetime
 from app import app, db, secret
 from flask_login import UserMixin
 
+from app.unit.model import Unit
+
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token
@@ -12,6 +14,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'))
+    unit = db.relationship('Unit')
     email = db.Column(db.String, unique=True, nullable=True)
     password = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=db.func.now())

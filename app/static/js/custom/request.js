@@ -26,7 +26,7 @@ $(document).on('click', '.rejectAllocation', function(event){
             if (res.error){
                 alert(res.error);
             }else{
-                alert('Allocation accepted successfully!');
+                alert('Allocation rejected successfully!');
                 $('#vehicleAllocation').load(location.href+" #vehicleAllocation>*","");
                 $('#vehicleReallocation').load(location.href+" #vehicleReallocation>*","");
             }

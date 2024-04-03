@@ -38,4 +38,4 @@ from app.command.controller import bp as command_bp
 app.register_blueprint(command_bp)
 
 # Error handlers
-from .error_handlers import *
+# from .error_handlers import *

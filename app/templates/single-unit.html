@@ -66,15 +66,31 @@
                                             
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label class="small mb-1" for="model">Location</label>
-                                                    <input required class="form-control py-2" id="unitLocation" name="location" type="text" placeholder="Location" value="{{unit.location}}"/>
+                                                    <label class="small mb-1" for="inputLastName">Location</label>
+                                                    <select required class="form-control py-2" name="location" id="unitLocation">
+                                                            {% for location in locations %}
+                                                            {% if unit.location == location.name %}
+                                                        <option selected value="{{location.name}}">{{location.name}}</option>
+                                                            {% else %}
+                                                        <option value="{{location.name}}">{{location.name}}</option>
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                    </select>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label class="small mb-1" for="type">Command</label>
-                                                    <input required class="form-control py-2" id="unitCommand" name="command" type="text" placeholder="Command" value="{{unit.command}}" />
+                                                    <label class="small mb-1" for="inputLastName">Command</label>
+                                                    <select required class="form-control py-2" name="command" id="unitCommand">
+                                                            {% for command in commands %}
+                                                            {% if unit.command == command.name %}
+                                                        <option selected value="{{command.name}}">{{command.name}}</option>
+                                                            {% else %}
+                                                        <option value="{{command.name}}">{{command.name}}</option>
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                    </select>
                                                 </div>
                                             </div>
 

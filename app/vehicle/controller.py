@@ -7,6 +7,7 @@ from datetime import datetime
 from app.unit.model import Unit
 from app.vehicle.model import *
 from app.vehicle.schema import *
+from helpers.color_maker import make_color
 
 bp = Blueprint('vehicle', __name__)
 
@@ -86,7 +87,7 @@ def reject_vehicle(id):
     allocation = Vehicleallocation.get_by_id(id)
     if allocation is None:
         return {'message': 'Allocation not found'}, 404
-    allocation.accept()
+    allocation.reject()
     return {'message': 'Allocation rejected successfully'}, 200
 
 @bp.get('/vehicles')
@@ -97,6 +98,53 @@ def get_vehicles():
         return render_template('admin-vehicles.html', allocated=allocated, unallocated=unallocated)
     allocated = Vehicleallocation.get_all_by_unit_id(current_user.unit_id)
     return render_template('mto-vehicles.html', allocated=allocated)
+
+@bp.get('/statistics')
+def get_vehicles_statistics():
+    units = Unit.get_all()
+    return render_template('statistics.html', units=units)
+
+@bp.post('/statistics/data')
+def get_vehicles_statistics_data():
+    make = request.form.get('make', '')
+    model = request.form.get('model', '')
+    year = request.form.get('year', '')
+    unit_id = request.form.get('unit_id')
+
+    allocations = Vehicleallocation.get_by_unit_id_make_model_year(make, model, year, unit_id)
+    
+    labels = [allocation[0] for allocation in allocations]
+    data = [allocation[1] for allocation in allocations]
+    colors = make_color(len(allocations))
+
+    return {
+        "labels":labels,
+        "data":data,
+        "colors":colors,
+    }
+
+@bp.get('/statistics/table')
+def get_vehicles_statistics_table():
+    make = request.args.get('make', '')
+    model = request.args.get('model', '')
+    year = request.args.get('year', '')
+    unit_id = request.args.get('unit_id')
+
+    allocations = Vehicleallocation.get_by_unit_id_make_model_year_unstructured(make, model, year, unit_id)
+
+    return {
+        'data': [[
+            allocation.vehicle.make,
+            allocation.vehicle.model,
+            allocation.vehicle.type,
+            allocation.vehicle.chassis_no,
+            allocation.vehicle.engine_no,
+            allocation.vehicle.year,
+            allocation.vehicle.lifespan,
+            allocation.vehicle.remaining_life(),
+            allocation.unit.name,
+            ] for allocation in allocations]
+        }
 
 @bp.get('/requests')
 def get_reallocation_vehicle_request():

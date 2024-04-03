@@ -1,6 +1,8 @@
 from app import db
 from sqlalchemy import func
 
+from app.unit.model import Unit
+
 class Vehicle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     allocation = db.relationship('Vehicleallocation', viewonly=True)
@@ -48,6 +50,20 @@ class Vehicle(db.Model):
     def remaining_life(self):
         difference = db.session.query(func.strftime('%Y', func.date('now')) - func.strftime('%Y', self.date)).scalar()
         return self.lifespan - difference
+    
+
+    @classmethod
+    def get_by_make_model_year(cls, make, model, year):
+        result = db.session.query(Vehicle.type, func.count()).filter(
+        Vehicle.make.ilike(f'%{make}%'),
+        Vehicle.model.ilike(f'%{model}%'),
+        Vehicle.year == year,
+        ).group_by(Vehicle.type).all()
+
+        print(result)
+
+        # Format the result as desired
+        return [(row[0], row[1]) for row in result]
 
 
     @classmethod
@@ -68,6 +84,7 @@ class Vehicleallocation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'))
     vehicle = db.relationship('Vehicle')
+    unit = db.relationship('Unit', primaryjoin="Vehicleallocation.unit_id == Unit.id")
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'))
     loosing_unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'))
     status = db.Column(db.String, default='pending')
@@ -84,7 +101,10 @@ class Vehicleallocation(db.Model):
         db.session.commit()
     
     def accept(self):
-        self.status = 'active'
+        if self.status == 'pending':
+            self.status = 'active'
+        else:
+            self.status = 'pending'
         self.update()
     
     def reject(self):
@@ -109,12 +129,40 @@ class Vehicleallocation(db.Model):
         return cls.query.filter_by(is_deleted=False, status='active').all()
     
     @classmethod
+    def get_by_unit_id_make_model_year(cls, make='', model='', year=0, unit_id=None):
+        result = db.session.query(Unit.name, func.count(Vehicle.id)).join(Vehicleallocation, Vehicleallocation.unit_id == Unit.id).join(Vehicle, Vehicle.id == Vehicleallocation.vehicle_id)
+        if unit_id:
+            result = result.filter(Vehicleallocation.unit_id == unit_id)
+        if make:
+            result = result.filter(Vehicle.make.ilike(f'%{make}%'))
+        if model:
+            result = result.filter(Vehicle.model.ilike(f'%{model}%'))
+        if year:
+            result = result.filter(Vehicle.year == year)
+
+        return result.group_by(Unit.name).all()
+    
+    @classmethod
+    def get_by_unit_id_make_model_year_unstructured(cls, make='', model='', year=0, unit_id=None):
+        result = db.session.query(Vehicleallocation).join(Vehicle, Vehicle.id == Vehicleallocation.vehicle_id)
+        if unit_id:
+            result = result.filter(Vehicleallocation.unit_id == unit_id)
+        if make:
+            result = result.filter(Vehicle.make.ilike(f'%{make}%'))
+        if model:
+            result = result.filter(Vehicle.model.ilike(f'%{model}%'))
+        if year:
+            result = result.filter(Vehicle.year == year)
+
+        return result.all()
+    
+    @classmethod
     def get_all(cls):
         return cls.query.filter(cls.is_deleted==False, cls.status!='inactive').all()
     
     @classmethod
     def get_all_by_unit_id(cls, unit_id):
-        return cls.query.filter(cls.is_deleted==False, cls.unit_id==unit_id, cls.status!='inactive').all()
+        return cls.query.filter(cls.is_deleted==False, cls.unit_id==unit_id, cls.status=='active').all()
     
     @classmethod
     def get_all_by_pending_loosing_unit_id(cls, unit_id):
@@ -125,12 +173,16 @@ class Vehicleallocation(db.Model):
         return cls.query.filter(cls.is_deleted==False, cls.status=='pending', cls.unit_id==unit_id).all()
     
     @classmethod
+    def get_by_vehicle_id(cls, vehicle_id):
+        return cls.query.filter(cls.is_deleted==False, cls.vehicle_id==vehicle_id).first()
+    
+    @classmethod
     def create(cls, vehicle_id, unit_id):
-        allocation = cls.get_by_unit_id_vehicle_id_active(unit_id, vehicle_id)
+        allocation = cls.get_by_vehicle_id(vehicle_id)
         if not allocation:
             allocation = cls(vehicle_id=vehicle_id, unit_id=unit_id)
             allocation.save()
-        if allocation.unit_id != unit_id:
+        if allocation.unit_id != unit_id and (allocation.status == 'active' or allocation.status == 'rejected'):
             allocation.status = 'reallocated'
             allocation.loosing_unit_id = allocation.unit_id
             allocation.unit_id = unit_id
