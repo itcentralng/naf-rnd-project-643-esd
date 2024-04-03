@@ -10,11 +10,13 @@ from flask_jwt_extended import (
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'))
     email = db.Column(db.String, unique=True, nullable=True)
     password = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=db.func.now())
     updated_at = db.Column(db.DateTime, nullable=False, default=db.func.now())
-    role = db.Column(db.String, nullable=True)
+    role = db.Column(db.String, nullable=True, default='mto')
     
     def save(self):
         db.session.add(self)
@@ -56,6 +58,10 @@ class User(db.Model, UserMixin):
         self.password = new_password
         self.hash_password()
         self.update()
+
+    @classmethod
+    def get_all_by_unit_id(cls, unit_id):
+        return cls.query.filter_by(unit_id=unit_id).all()
     
     @classmethod
     def get_by_id(cls, id):
@@ -66,8 +72,8 @@ class User(db.Model, UserMixin):
         return User.query.filter(User.email==email).first()
     
     @classmethod
-    def create(cls, email, password, role):
-        user = cls(email=email, password=password, role=role)
+    def create(cls, name, email, password, role, unit_id):
+        user = cls(name=name, email=email, password=password, role=role, unit_id=unit_id)
         user.hash_password()
         user.save()
         return user

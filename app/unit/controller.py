@@ -5,6 +5,7 @@ from app.unit.model import *
 from app.unit.schema import *
 from app.location.model import Location
 from app.command.model import Command
+from app.user.model import User
 
 bp = Blueprint('unit', __name__)
 
@@ -17,11 +18,17 @@ def create_unit():
     return {'message':'Unit added successfully!'}, 201
 
 @bp.get('/units')
-def add_unit():
+def get_all_units():
     locations = Location.get_all()
     commands = Command.get_all()
     units = Unit.get_all()
     return render_template('units.html', locations=locations, commands=commands, units=units)
+
+@bp.get('/unit/<int:id>')
+def single_unit(id):
+    unit = Unit.get_by_id(id)
+    personnels = User.get_all_by_unit_id(id)
+    return render_template('single-unit.html', unit=unit, personnels=personnels)
 
 @bp.put('/unit/<int:id>')
 @auth_required()
@@ -29,7 +36,7 @@ def update_unit(id):
     unit = Unit.get_by_id(id)
     if unit is None:
         return {'message': 'Unit not found'}, 404
-    name = request.json.get('name')
+    name = request.form.get('name')
     unit.update(name)
     return UnitSchema().dump(unit), 200
 
@@ -41,9 +48,3 @@ def delete_unit(id):
         return {'message': 'Unit not found'}, 404
     unit.delete()
     return {'message': 'Unit deleted successfully'}, 200
-
-@bp.get('/units')
-@auth_required()
-def get_units():
-    units = Unit.get_all()
-    return UnitSchema(many=True).dump(units), 200

@@ -29,7 +29,7 @@ def login():
 @bp.patch('/reset-password')
 @auth_required()
 def reset_password():
-    new_password = request.json.get('password')
+    new_password = request.form.get('password')
     if not new_password:
         return {'message': 'Password is required'}, 400
     elif len(new_password) < 6:
@@ -38,15 +38,16 @@ def reset_password():
     return {'message': 'Password updated successfully'}, 200
     
 
-@bp.post('/register')
-def register():
-    email = request.json.get('email')
-    password = request.json.get('password')
-    role = request.json.get('role')
+@bp.post('/personnel/<int:unit_id>')
+def register(unit_id):
+    name = request.form.get('name')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    role = request.form.get('role', 'mto')
     user = User.get_by_email(email)
     if user is not None:
         return {'message': 'User already exists'}, 400
-    user = User.create(email, password, role)
+    user = User.create(name, email, password, role, unit_id)
     if user is not None:
         return {'message': 'User created'}, 201
     return {'message': 'User not created'}, 400

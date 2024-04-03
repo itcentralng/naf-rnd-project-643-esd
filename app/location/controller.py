@@ -9,7 +9,7 @@ bp = Blueprint('location', __name__)
 @bp.post('/location')
 @auth_required()
 def create_location():
-    name = request.json.get('name')
+    name = request.form.get('name')
     location = Location.create(name)
     return LocationSchema().dump(location), 201
 
@@ -27,7 +27,7 @@ def update_location(id):
     location = Location.get_by_id(id)
     if location is None:
         return {'message': 'Location not found'}, 404
-    name = request.json.get('name')
+    name = request.form.get('name')
     location.update(name)
     return LocationSchema().dump(location), 200
 

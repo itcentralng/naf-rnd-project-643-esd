@@ -9,7 +9,7 @@ bp = Blueprint('command', __name__)
 @bp.post('/command')
 @auth_required()
 def create_command():
-    name = request.json.get('name')
+    name = request.form.get('name')
     command = Command.create(name)
     return CommandSchema().dump(command), 201
 
@@ -27,7 +27,7 @@ def update_command(id):
     command = Command.get_by_id(id)
     if command is None:
         return {'message': 'Command not found'}, 404
-    name = request.json.get('name')
+    name = request.form.get('name')
     command.update(name)
     return CommandSchema().dump(command), 200
 

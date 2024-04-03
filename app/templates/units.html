@@ -60,7 +60,6 @@
                                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th>ID</th>
                                                         <th>Name</th>
                                                         <th>Location</th>
                                                         <th>Command</th>
@@ -68,7 +67,6 @@
                                                 </thead>
                                                 <tfoot>
                                                     <tr>
-                                                        <th>ID</th>
                                                         <th>Name</th>
                                                         <th>Location</th>
                                                         <th>Command</th>
@@ -77,8 +75,7 @@
                                                 <tbody>
                                                     {% for unit in units %}
                                                     <tr>
-                                                        <td>{{unit.id}}</td>
-                                                        <td>{{unit.name}}</td>
+                                                        <td><a href="/unit/{{unit.id}}">{{unit.name}}</a></td>
                                                         <td>{{unit.location}}</td>
                                                         <td>{{unit.command}}</td>
                                                     </tr>
