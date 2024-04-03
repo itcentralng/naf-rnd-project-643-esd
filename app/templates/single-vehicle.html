@@ -81,17 +81,24 @@
                                                 </div>
                                             </div>
                                             
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="small mb-1" for="year">Year</label>
                                                     <input required class="form-control py-2" id="year" name="year" type="number" placeholder="Year" value="{{vehicle.year}}" />
                                                 </div>
                                             </div>
                                             
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="small mb-1" for="lifespan">Lifespan</label>
                                                     <input required class="form-control py-2" id="lifespan" name="lifespan" type="number" placeholder="Lifespan" value="{{vehicle.lifespan}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="lifespan">Remaining Life</label>
+                                                    <input required class="form-control py-2" id="remainingLife" name="remainingLife" type="number" placeholder="remainingLife" value="{{vehicle.remaining_life()}}" readonly />
                                                 </div>
                                             </div>
                                             

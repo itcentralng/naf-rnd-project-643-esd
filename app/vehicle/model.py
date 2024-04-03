@@ -1,4 +1,5 @@
 from app import db
+from sqlalchemy import func
 
 class Vehicle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -43,6 +44,11 @@ class Vehicle(db.Model):
         self.is_deleted = True
         self.updated_at = db.func.now()
         db.session.commit()
+
+    def remaining_life(self):
+        difference = db.session.query(func.strftime('%Y', func.date('now')) - func.strftime('%Y', self.date)).scalar()
+        return self.lifespan - difference
+
 
     @classmethod
     def get_by_id(cls, id):
