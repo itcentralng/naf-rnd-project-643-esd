@@ -11,19 +11,21 @@
                             <li class="breadcrumb-item active"></li>
                         </ol>
                         <div class="row">
+                            {% if not vehicle.allocation %}
                             <div class="col-xl-4">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area mr-1"></i>
                                         Allocation
                                     </div>
-                                    <form method="POST" id="vehicleForm">
+                                    <div class="card-body">
+                                    <form method="POST" id="allocationForm">
                                         <div class="form-row">
                                             
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="small mb-1" for="unit">Allocation Unit</label>
-                                                    <select required class="form-control py-2 select2" name="unitid" id="unitid">
+                                                    <select required class="form-control py-2 select2" name="unit_id" id="unit_id">
                                                         <option selected value="0">Select Unit</option>
                                                             {% for unit in units %}
                                                         <option value="{{unit.id}}">{{unit.name}}</option>
@@ -33,16 +35,21 @@
                                             </div>
                                             
                                         </div>
-                                        <div class="form-group mt-4 mb-0"><button class="btn btn-primary btn-block" id="addVehicle">Allocate</button></div>
+                                        <div class="form-group mt-4 mb-0"><button class="btn btn-primary btn-block" id="addAllocation" vehicleId="{{vehicle.id}}">Allocate</button></div>
                                     </form>
+                                </div>
                                 </div>
                             </div>
                             <div class="col-xl-8">
+                            {% else %}
+                            <div class="col-xl-12">
+                                {% endif  %}
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar mr-1"></i>
                                         Information
                                     </div>
+                                    <div class="card-body">
                                     <form method="POST" id="vehicleForm">
                                         <div class="form-row">
                                             
@@ -131,8 +138,9 @@
                                             </div>
                                             
                                         </div>
-                                        <div class="form-group mt-4 mb-0"><button class="btn btn-primary btn-block" id="updateVehicle">Update</button></div>
+                                        <div class="form-group mt-4 mb-0"><button class="btn btn-primary btn-block" id="updateVehicle" vehicleId="{{vehicle.id}}">Update</button></div>
                                     </form>
+                                </div>
                                 </div>
                             </div>
                         </div>

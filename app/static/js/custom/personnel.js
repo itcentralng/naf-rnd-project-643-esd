@@ -1,8 +1,8 @@
-$(document).on('click', '#addPers', function(event){
+$(document).on('click', '#addPersonnel', function(event){
     event.preventDefault();
     form = $('#persForm')[0]
     req = $.ajax({
-        url:'/clerk/add-pers',
+        url:'/personnel',
         type:'post',
         contentType: false,
         processData: false,
