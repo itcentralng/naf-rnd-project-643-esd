@@ -1,3 +1,5 @@
+let table
+
 $(document).on('click', '#searchStats', function(event){
     event.preventDefault();
         form = $('#statsForm')[0]
@@ -19,7 +21,11 @@ $(document).on('click', '#searchStats', function(event){
                     let model = $('#model').val();
                     let year = $('#year').val();
 
-                    $('#resultTable').DataTable({
+                    if (table){
+                        table.destroy();
+                    }
+
+                    table = $('#resultTable').DataTable({
                         "ajax": `/statistics/table?unit_id=${unitId}&make=${make}&model=${model}&year=${year}`
                     });
                 

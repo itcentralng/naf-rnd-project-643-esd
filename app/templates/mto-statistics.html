@@ -1,0 +1,117 @@
+{% include 'header.html' %}
+    <body class="sb-nav-fixed">
+        {% include 'nav.html' %}
+        <div id="layoutSidenav">
+            {% include 'siderbar.html' %}
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid">
+                        <h1 class="mt-4">Statistics</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active"></li>
+                        </ol>
+                        <div class="row">
+                            <div class="col-xl-4">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area mr-1"></i>
+                                        Filter
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="POST" id="statsForm">
+                                            <div class="form-row">
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="unit">Unit</label>
+                                                        <select required class="form-control py-2" name="unit_id" id="unit_id">
+                                                            <option selected value="{{unit.id}}">{{unit.name}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="make">Make</label>
+                                                        <input required class="form-control py-2" id="make" name="make" type="text" placeholder="Make" />
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="model">Model</label>
+                                                        <input required class="form-control py-2" id="model" name="model" type="text" placeholder="Model" />
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="year">Year</label>
+                                                        <input required class="form-control py-2" id="year" name="year" type="number" placeholder="Year" />
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                            </div>
+                                            <div class="form-group mt-4 mb-0"><button class="btn btn-primary btn-block" id="searchStats">Search</button></div>
+                                        </form>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-8">
+                                <!-- Chart Goes Here -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-bar mr-1"></i>
+                                        Results
+                                    </div>
+                                    <div class="card-body"><canvas id="statisticsChart" width="100%" height="40"></canvas></div>
+                                </div>
+                                <!-- Table Goes Here -->
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <!-- Allocated Vehicles -->
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" id="resultTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Make</th>
+                                                            <th>Model</th>
+                                                            <th>Type</th>
+                                                            <th>Chasis</th>
+                                                            <th>Engine</th>
+                                                            <th>Year</th>
+                                                            <th>Lifespan</th>
+                                                            <th>Remaining Life</th>
+                                                            <th>Unit</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th>Make</th>
+                                                            <th>Model</th>
+                                                            <th>Type</th>
+                                                            <th>Chassis</th>
+                                                            <th>Engine</th>
+                                                            <th>Year</th>
+                                                            <th>Lifespan</th>
+                                                            <th>Remaining Life</th>
+                                                            <th>Unit</th>
+                                                        </tr>
+                                                    </tfoot>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+{% include 'footer.html' %}
+<script src = "{{url_for('static',filename='js/custom/main.js')}}"></script>
+<script src="{{url_for('static', filename='js/custom/statistics.js')}}"></script>

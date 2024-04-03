@@ -101,8 +101,11 @@ def get_vehicles():
 
 @bp.get('/statistics')
 def get_vehicles_statistics():
-    units = Unit.get_all()
-    return render_template('statistics.html', units=units)
+    if current_user.role == 'admin':
+        units = Unit.get_all()
+        return render_template('admin-statistics.html', units=units)
+    unit = Unit.get_by_id(current_user.unit_id)
+    return render_template('mto-statistics.html', unit=unit)
 
 @bp.post('/statistics/data')
 def get_vehicles_statistics_data():
