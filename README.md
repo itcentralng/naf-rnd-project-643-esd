@@ -12,4 +12,6 @@ To run this software, follow the steps below:
 
 3. Upgrade the database `flask db upgrade`
 
-4. Start the server by running `./run`.
+4. To populate the datebase for the firs time check and run `python manage.py`.
+
+5. Start the server by running `flask run`.
