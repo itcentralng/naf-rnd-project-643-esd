@@ -10,4 +10,6 @@ To run this software, follow the steps below:
 
 2. Install dependencies by running `pip install -r requirements.txt`.
 
-3. Start the server by running `./run`.
+3. Upgrade the database `flask db upgrade`
+
+4. Start the server by running `./run`.
