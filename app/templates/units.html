@@ -1,0 +1,98 @@
+{% include 'header.html' %}
+    <body class="sb-nav-fixed">
+        {% include 'nav.html' %}
+        <div id="layoutSidenav">
+            {% include 'siderbar.html' %}
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid">
+                        <h1 class="mt-4">Units</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active"></li>
+                        </ol>
+                        <div class="col-md-12">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Unit Info</h3></div>
+                                <div class="card-body">
+
+                                    <form method="POST" id="unitForm">
+                                        <div class="form-row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="unit">Unit Name</label>
+                                                    <input required class="form-control py-2" id="name" name="name" type="text" placeholder="Enter Unit's Name" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="inputLastName">Location of Unit</label>
+                                                    <select required class="form-control py-2 select2" name="location" id="location">
+                                                        <option selected value="0">Select Location</option>
+                                                            {% for location in locations %}
+                                                        <option value="{{location.name}}">{{location.name}}</option>
+                                                            {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="inputLastName">Command</label>
+                                                    <select required class="form-control py-2" name="command" id="command">
+                                                        <option selected value="0">Select Command</option>
+                                                            {% for command in commands %}
+                                                        <option value="{{command.name}}">{{command.name}}</option>
+                                                            {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                        <div class="form-group mt-4 mb-0"><button class="btn btn-primary btn-block" id="addUnit">Submit</button></div>
+                                    </form>
+                                </div>
+
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-table mr-1"></i>
+                                        Available Units
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Name</th>
+                                                        <th>Location</th>
+                                                        <th>Command</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Name</th>
+                                                        <th>Location</th>
+                                                        <th>Command</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                    {% for unit in units %}
+                                                    <tr>
+                                                        <td>{{unit.id}}</td>
+                                                        <td>{{unit.name}}</td>
+                                                        <td>{{unit.location}}</td>
+                                                        <td>{{unit.command}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+{% include 'footer.html' %}
+<script src = "{{url_for('static',filename='js/custom/main.js')}}"></script>
+<script src="{{url_for('static', filename='js/custom/unit.js')}}"></script>

@@ -1,0 +1,218 @@
+{% include 'header.html' %}
+    <body class="sb-nav-fixed">
+        {% include 'nav.html' %}
+        <div id="layoutSidenav">
+            {% include 'siderbar.html' %}
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid">
+                        <h1 class="mt-4">Vehicles</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active"></li>
+                        </ol>
+                        <div class="col-md-12">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Vehicle Info</h3></div>
+                                <div class="card-body">
+
+                                    <form method="POST" id="vehicleForm">
+                                        <div class="form-row">
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="make">Make</label>
+                                                    <input required class="form-control py-2" id="make" name="make" type="text" placeholder="Make" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="model">Model</label>
+                                                    <input required class="form-control py-2" id="model" name="model" type="text" placeholder="Model" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="type">Type</label>
+                                                    <input required class="form-control py-2" id="type" name="type" type="text" placeholder="Type" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="trim">Trim</label>
+                                                    <input required class="form-control py-2" id="trim" name="trim" type="text" placeholder="Trim" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="year">Year</label>
+                                                    <input required class="form-control py-2" id="year" name="year" type="number" placeholder="Year" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="lifespan">Lifespan</label>
+                                                    <input required class="form-control py-2" id="lifespan" name="lifespan" type="number" placeholder="Lifespan" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="chassis_no">Chassis N0</label>
+                                                    <input required class="form-control py-2" id="chassis_no" name="chassis_no" type="text" placeholder="Chassis N0" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="chassis_no">Engine N0</label>
+                                                    <input required class="form-control py-2" id="engine_no" name="engine_no" type="text" placeholder="Engine N0" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="chassis_no">Supplier</label>
+                                                    <input required class="form-control py-2" id="supplier" name="supplier" type="text" placeholder="Supplier" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="chassis_no">Contract Reference</label>
+                                                    <input required class="form-control py-2" id="contract_reference" name="contract_reference" type="text" placeholder="Contract Reference" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="chassis_no">Date</label>
+                                                    <input required class="form-control py-2" id="date" name="date" type="date" placeholder="Date" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="chassis_no">Remarks</label>
+                                                    <input required class="form-control py-2" id="remark" name="remark" type="text" placeholder="Remarks" />
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="form-group mt-4 mb-0"><button class="btn btn-primary btn-block" id="addVehicle">Submit</button></div>
+                                    </form>
+                                </div>
+
+                                <!-- Unallocated Vehicles -->
+                                <div class="card mb-4" id="unallocated">
+                                    <div class="card-header">
+                                        <i class="fas fa-table mr-1"></i>
+                                        Unallocated Vehicles
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Make</th>
+                                                        <th>Model</th>
+                                                        <th>Type</th>
+                                                        <th>Chasis</th>
+                                                        <th>Engine</th>
+                                                        <th>Year</th>
+                                                        <th>Lifespan</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>Make</th>
+                                                        <th>Model</th>
+                                                        <th>Type</th>
+                                                        <th>Chassis</th>
+                                                        <th>Engine</th>
+                                                        <th>Year</th>
+                                                        <th>Lifespan</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                    {% for vehicle in unallocated %}
+                                                    <tr>
+                                                        <td>
+                                                            <a href="/vehicle/{{vehicle.id}}">{{vehicle.make}}</a>
+                                                        </td>
+                                                        <td>{{vehicle.model}}</td>
+                                                        <td>{{vehicle.type}}</td>
+                                                        <td>{{vehicle.chassis_no}}</td>
+                                                        <td>{{vehicle.engine_no}}</td>
+                                                        <td>{{vehicle.year}}</td>
+                                                        <td>{{vehicle.lifespan}} Years</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Allocated Vehicles -->
+                                <div class="card mb-4" id="allocated">
+                                    <div class="card-header">
+                                        <i class="fas fa-table mr-1"></i>
+                                        Allocated Vehicles
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Make</th>
+                                                        <th>Model</th>
+                                                        <th>Type</th>
+                                                        <th>Chasis</th>
+                                                        <th>Engine</th>
+                                                        <th>Year</th>
+                                                        <th>Lifespan</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>Make</th>
+                                                        <th>Model</th>
+                                                        <th>Type</th>
+                                                        <th>Chassis</th>
+                                                        <th>Engine</th>
+                                                        <th>Year</th>
+                                                        <th>Lifespan</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                    {% for allocation in allocated %}
+                                                    <tr>
+                                                        <td>
+                                                            <a href="/vehicle/{{allocation.vehicle.id}}">{{allocation.vehicle.make}}</a>
+                                                        </td>
+                                                        <td>{{allocation.vehicle.model}}</td>
+                                                        <td>{{allocation.vehicle.type}}</td>
+                                                        <td>{{allocation.vehicle.chassis_no}}</td>
+                                                        <td>{{allocation.vehicle.engine_no}}</td>
+                                                        <td>{{allocation.vehicle.year}}</td>
+                                                        <td>{{allocation.vehicle.lifespan}} Years</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+{% include 'footer.html' %}
+<script src = "{{url_for('static',filename='js/custom/main.js')}}"></script>
+<script src="{{url_for('static', filename='js/custom/vehicle.js')}}"></script>
