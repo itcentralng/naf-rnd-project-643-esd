@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 MAIL_SERVER = os.environ.get('MAIL_SERVER')
 MAIL_PORT = os.environ.get('MAIL_PORT')
