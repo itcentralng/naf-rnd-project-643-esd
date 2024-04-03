@@ -90,17 +90,15 @@
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                            {% for vehicle in unallocated %}
+                                            {% for allocation in allocated %}
                                             <tr>
-                                                <td>
-                                                    <a href="/vehicle/{{vehicle.id}}">{{vehicle.make}}</a>
-                                                </td>
-                                                <td>{{vehicle.model}}</td>
-                                                <td>{{vehicle.type}}</td>
-                                                <td>{{vehicle.chassis_no}}</td>
-                                                <td>{{vehicle.engine_no}}</td>
-                                                <td>{{vehicle.year}}</td>
-                                                <td>{{vehicle.lifespan}} Years</td>
+                                                <td>{{allocation.vehicle.make}}</td>
+                                                <td>{{allocation.vehicle.model}}</td>
+                                                <td>{{allocation.vehicle.type}}</td>
+                                                <td>{{allocation.vehicle.chassis_no}}</td>
+                                                <td>{{allocation.vehicle.engine_no}}</td>
+                                                <td>{{allocation.vehicle.year}}</td>
+                                                <td>{{allocation.vehicle.lifespan}} Years</td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>

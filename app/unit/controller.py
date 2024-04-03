@@ -31,17 +31,17 @@ def single_unit(id):
     return render_template('single-unit.html', unit=unit, personnels=personnels)
 
 @bp.put('/unit/<int:id>')
-@auth_required()
 def update_unit(id):
     unit = Unit.get_by_id(id)
     if unit is None:
         return {'message': 'Unit not found'}, 404
     name = request.form.get('name')
-    unit.update(name)
+    location = request.form.get('location')
+    command = request.form.get('command')
+    unit.update(name, location, command)
     return UnitSchema().dump(unit), 200
 
 @bp.delete('/unit/<int:id>')
-@auth_required()
 def delete_unit(id):
     unit = Unit.get_by_id(id)
     if unit is None:

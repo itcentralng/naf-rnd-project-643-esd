@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template
 from app.route_guard import auth_required
+from flask_login import current_user
 
 from datetime import datetime
 
@@ -72,8 +73,33 @@ def delete_vehicle(id):
     vehicle.delete()
     return {'message': 'Vehicle deleted successfully'}, 200
 
+@bp.patch('/vehicle/accept/<int:id>')
+def accept_vehicle(id):
+    allocation = Vehicleallocation.get_by_id(id)
+    if allocation is None:
+        return {'message': 'Allocation not found'}, 404
+    allocation.accept()
+    return {'message': 'Allocation accepted successfully'}, 200
+
+@bp.patch('/vehicle/reject/<int:id>')
+def reject_vehicle(id):
+    allocation = Vehicleallocation.get_by_id(id)
+    if allocation is None:
+        return {'message': 'Allocation not found'}, 404
+    allocation.accept()
+    return {'message': 'Allocation rejected successfully'}, 200
+
 @bp.get('/vehicles')
 def get_vehicles():
-    unallocated = Vehicle.get_all()
-    allocated = Vehicleallocation.get_all()
-    return render_template('vehicles.html', allocated=allocated, unallocated=unallocated)
+    if current_user.role == 'admin':
+        unallocated = Vehicle.get_all()
+        allocated = Vehicleallocation.get_all()
+        return render_template('admin-vehicles.html', allocated=allocated, unallocated=unallocated)
+    allocated = Vehicleallocation.get_all_by_unit_id(current_user.unit_id)
+    return render_template('mto-vehicles.html', allocated=allocated)
+
+@bp.get('/requests')
+def get_reallocation_vehicle_request():
+    reallocations = Vehicleallocation.get_all_by_pending_loosing_unit_id(current_user.unit_id)
+    allocations = Vehicleallocation.get_all_unaccepted_by_unit_id(current_user.unit_id)
+    return render_template('requests.html', reallocations=reallocations, allocations=allocations)

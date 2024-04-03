@@ -63,6 +63,7 @@ class Vehicleallocation(db.Model):
     vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'))
     vehicle = db.relationship('Vehicle')
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'))
+    loosing_unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'))
     status = db.Column(db.String, default='pending')
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now())
@@ -75,6 +76,14 @@ class Vehicleallocation(db.Model):
     def update(self):
         self.updated_at = db.func.now()
         db.session.commit()
+    
+    def accept(self):
+        self.status = 'active'
+        self.update()
+    
+    def reject(self):
+        self.status = 'rejected'
+        self.update()
     
     def delete(self):
         self.is_deleted = True
@@ -98,9 +107,26 @@ class Vehicleallocation(db.Model):
         return cls.query.filter(cls.is_deleted==False, cls.status!='inactive').all()
     
     @classmethod
+    def get_all_by_unit_id(cls, unit_id):
+        return cls.query.filter(cls.is_deleted==False, cls.unit_id==unit_id, cls.status!='inactive').all()
+    
+    @classmethod
+    def get_all_by_pending_loosing_unit_id(cls, unit_id):
+        return cls.query.filter(cls.is_deleted==False, cls.status=='reallocated', cls.loosing_unit_id==unit_id).all()
+    
+    @classmethod
+    def get_all_unaccepted_by_unit_id(cls, unit_id):
+        return cls.query.filter(cls.is_deleted==False, cls.status=='pending', cls.unit_id==unit_id).all()
+    
+    @classmethod
     def create(cls, vehicle_id, unit_id):
         allocation = cls.get_by_unit_id_vehicle_id_active(unit_id, vehicle_id)
         if not allocation:
             allocation = cls(vehicle_id=vehicle_id, unit_id=unit_id)
             allocation.save()
+        if allocation.unit_id != unit_id:
+            allocation.status = 'reallocated'
+            allocation.loosing_unit_id = allocation.unit_id
+            allocation.unit_id = unit_id
+            allocation.update()
         return allocation

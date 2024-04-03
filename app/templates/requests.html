@@ -1,0 +1,149 @@
+{% include 'header.html' %}
+    <body class="sb-nav-fixed">
+        {% include 'nav.html' %}
+        <div id="layoutSidenav">
+            {% include 'siderbar.html' %}
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid">
+                        <h1 class="mt-4">Vehicles</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active"></li>
+                        </ol>
+                        <!-- New Allocation -->
+                        <div class="col-md-12">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Allocation Requests</h3></div>
+                                <!-- Vehicles Requests -->
+                                <div class="card mb-4" id="vehicleAllocation">
+                                    <div class="card-header">
+                                        <i class="fas fa-table mr-1"></i>
+                                        New Vehicle Allocation Requests
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Make</th>
+                                                        <th>Model</th>
+                                                        <th>Type</th>
+                                                        <th>Chasis</th>
+                                                        <th>Engine</th>
+                                                        <th>Year</th>
+                                                        <th>Lifespan</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>Make</th>
+                                                        <th>Model</th>
+                                                        <th>Type</th>
+                                                        <th>Chassis</th>
+                                                        <th>Engine</th>
+                                                        <th>Year</th>
+                                                        <th>Lifespan</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                    {% for allocation in allocations %}
+                                                    <tr>
+                                                        <td>
+                                                            <a href="/vehicle/{{allocation.vehicle.id}}">{{allocation.vehicle.make}}</a>
+                                                        </td>
+                                                        <td>{{allocation.vehicle.model}}</td>
+                                                        <td>{{allocation.vehicle.type}}</td>
+                                                        <td>{{allocation.vehicle.chassis_no}}</td>
+                                                        <td>{{allocation.vehicle.engine_no}}</td>
+                                                        <td>{{allocation.vehicle.year}}</td>
+                                                        <td>{{allocation.vehicle.lifespan}} Years</td>
+                                                        <td>
+                                                            <a style="color: green;" href="#" class="acceptAllocation" allocationId="{{allocation.id}}">Accept</a>
+                                                            </br>
+                                                            </br>
+                                                            <a style="color: red;" href="#" class="rejectAllocation" allocationId="{{allocation.id}}">Reject</a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- New Reallocation -->
+                        <div class="col-md-12">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Reallocation Requests</h3></div>
+                                <!-- Vehicles Requests -->
+                                <div class="card mb-4" id="vehicleReallocation">
+                                    <div class="card-header">
+                                        <i class="fas fa-table mr-1"></i>
+                                        New Vehicle Reallocation Requests
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Make</th>
+                                                        <th>Model</th>
+                                                        <th>Type</th>
+                                                        <th>Chasis</th>
+                                                        <th>Engine</th>
+                                                        <th>Year</th>
+                                                        <th>Lifespan</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>Make</th>
+                                                        <th>Model</th>
+                                                        <th>Type</th>
+                                                        <th>Chassis</th>
+                                                        <th>Engine</th>
+                                                        <th>Year</th>
+                                                        <th>Lifespan</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                    
+                                                    {% for reallocation in reallocations %}
+                                                    <tr>
+                                                        <td>
+                                                            <a href="/vehicle/{{reallocation.vehicle.id}}">{{reallocation.vehicle.make}}</a>
+                                                        </td>
+                                                        <td>{{reallocation.vehicle.model}}</td>
+                                                        <td>{{reallocation.vehicle.type}}</td>
+                                                        <td>{{reallocation.vehicle.chassis_no}}</td>
+                                                        <td>{{reallocation.vehicle.engine_no}}</td>
+                                                        <td>{{reallocation.vehicle.year}}</td>
+                                                        <td>{{reallocation.vehicle.lifespan}} Years</td>
+                                                        <td>
+                                                            <a style="color: green;" href="#" class="acceptAllocation" allocationId="{{reallocation.id}}">Accept</a>
+                                                            </br>
+                                                            </br>
+                                                            <a style="color: red;" href="#" class="rejectAllocation" allocationId="{{reallocation.id}}">Reject</a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+{% include 'footer.html' %}
+<script src = "{{url_for('static',filename='js/custom/main.js')}}"></script>
+<script src="{{url_for('static', filename='js/custom/request.js')}}"></script>

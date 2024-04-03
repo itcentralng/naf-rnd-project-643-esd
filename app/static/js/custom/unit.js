@@ -26,6 +26,34 @@ $(document).on('click', '#addUnit', function(event){
     }
 });
 
+$(document).on('click', '#updateUnit', function(event){
+    event.preventDefault();
+    let unitId = $(this).attr('unitId');
+    let name = $('#unitName').val();
+    let location_ = $('#unitLocation').val();
+    let command = $('#unitCommand').val();
+    console.log(name,location_,command)
+    if (name && location_ && command){
+        form = $('#unitForm')[0]
+        req = $.ajax({
+            url:'/unit/'+unitId,
+            type:'put',
+            contentType: false,
+            processData: false,
+            data: new FormData(form)
+        });
+        req.done(function(res){
+            if (res.error){
+                alert(res.error);
+            }else{
+                alert('Unit Updated Successfully');
+            }
+        });
+    }else{
+        alert('Please enter required fields')
+    }
+});
+
 $(document).on('click', '#addPersonnel', function(event){
     event.preventDefault();
     let unitId = $(this).attr('unitId')
