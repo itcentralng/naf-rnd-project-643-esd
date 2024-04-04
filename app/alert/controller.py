@@ -6,18 +6,15 @@ from app.alert.schema import *
 
 bp = Blueprint('alert', __name__)
 
-@bp.post('/alert')
-@auth_required()
-def create_alert():
-    vehicle_id = request.json.get('vehicle_id')
-    mileage_limit = request.json.get('mileage_limit')
-    current_mileage = request.json.get('current_mileage')
-    status = request.json.get('status')
+@bp.post('/alert/<int:vehicle_id>')
+def create_alert(vehicle_id):
+    mileage_limit = request.form.get('mileage_limit')
+    current_mileage = request.form.get('current_mileage')
+    status = request.form.get('status')
     alert = Alert.create(vehicle_id, mileage_limit, current_mileage, status)
     return AlertSchema().dump(alert), 201
 
 @bp.get('/alert/<int:id>')
-@auth_required()
 def get_alert(id):
     alert = Alert.get_by_id(id)
     if alert is None:
@@ -25,20 +22,18 @@ def get_alert(id):
     return AlertSchema().dump(alert), 200
 
 @bp.put('/alert/<int:id>')
-@auth_required()
 def update_alert(id):
     alert = Alert.get_by_id(id)
     if alert is None:
         return {'message': 'Alert not found'}, 404
-    vehicle_id = request.json.get('vehicle_id')
-    mileage_limit = request.json.get('mileage_limit')
-    current_mileage = request.json.get('current_mileage')
-    status = request.json.get('status')
+    vehicle_id = request.form.get('vehicle_id')
+    mileage_limit = request.form.get('mileage_limit')
+    current_mileage = request.form.get('current_mileage')
+    status = request.form.get('status')
     alert.update(vehicle_id, mileage_limit, current_mileage, status)
     return AlertSchema().dump(alert), 200
 
 @bp.delete('/alert/<int:id>')
-@auth_required()
 def delete_alert(id):
     alert = Alert.get_by_id(id)
     if alert is None:
@@ -47,7 +42,6 @@ def delete_alert(id):
     return {'message': 'Alert deleted successfully'}, 200
 
 @bp.get('/alerts')
-@auth_required()
 def get_alerts():
     alerts = Alert.get_all()
     return AlertSchema(many=True).dump(alerts), 200

@@ -270,77 +270,93 @@
                                     </div>
 
                                     <div class="card-body">
-                                        <form method="POST" id="vehicleForm">
+                                        <form method="POST" id="movementForm">
                                             <div class="form-row">
                                                 
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label class="small mb-1" for="date">Date & Time</label>
-                                                        <input required class="form-control py-2" id="date" name="date" type="datetime-local"/>
+                                                        <label class="small mb-1" for="movementDate">Date & Time</label>
+                                                        <input required class="form-control py-2" id="movementDate" name="date" type="datetime-local"/>
                                                     </div>
                                                 </div>
                                                 
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label class="small mb-1" for="mileage">Mileage</label>
-                                                        <input required class="form-control py-2" id="mileage" name="mileage" type="number" placeholder="Mileage"/>
+                                                        <label class="small mb-1" for="driver">Driver</label>
+                                                        <input required class="form-control py-2" id="driver" name="driver" type="text" placeholder="Driver"/>
                                                     </div>
                                                 </div>
                                                 
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label class="small mb-1" for="unit">Type</label>
-                                                        <select required class="form-control py-2" name="type" id="type">
-                                                            {% for m in maintenance %}
-                                                            <option selected value="{{m}}">{{m}}</option>
-                                                            {% endfor %}
-                                                        </select>
+                                                        <label class="small mb-1" for="starting_point">Starting Point</label>
+                                                        <input required class="form-control py-2" id="starting_point" name="starting_point" type="text" placeholder="Starting Point"/>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="destination">Destination</label>
+                                                        <input required class="form-control py-2" id="destination" name="destination" type="text" placeholder="Destination"/>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="movementMileage">Mileage</label>
+                                                        <input required class="form-control py-2" id="movementMileage" name="mileage" type="number" placeholder="Mileage"/>
                                                     </div>
                                                 </div>
                                                 
                                                 
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label class="small mb-1" for="description">Description</label>
-                                                        <textarea required class="form-control py-2" id="description" name="description" placeholder="description"></textarea>
+                                                        <label class="small mb-1" for="remarks">Remarks</label>
+                                                        <textarea required class="form-control py-2" id="remarks" name="remarks" placeholder="Remarks"></textarea>
                                                     </div>
                                                 </div>
 
                                                 
                                             </div>
-                                            <div class="form-group mt-4 mb-0"><button class="btn btn-primary btn-block" id="addMovement" >Submit</button></div>
+                                            <div class="form-group mt-4 mb-0"><button class="btn btn-primary btn-block" id="addMovement" vehicleId="{{vehicle.id}}">Submit</button></div>
                                         </form>
                                     </div>
                                     
                                 </div>
-                                <div class="card mb-4">
+                                <div class="card mb-4" id="tableMovement">
                                     <div class="card-header">
                                         <div class="card-body">
                                             <div class="table-responsive">
                                                 <table class="table table-bordered" id="movementTable" width="100%" cellspacing="0">
                                                     <thead>
                                                         <tr>
-                                                            <th>Type</th>
                                                             <th>Date</th>
+                                                            <th>Driver</th>
+                                                            <th>Starting Point</th>
+                                                            <th>Destination</th>
                                                             <th>Mileage</th>
-                                                            <th>Description</th>
+                                                            <th>Remarks</th>
                                                         </tr>
                                                     </thead>
                                                     <tfoot>
                                                         <tr>
-                                                            <th>Type</th>
                                                             <th>Date</th>
+                                                            <th>Driver</th>
+                                                            <th>Starting Point</th>
+                                                            <th>Destination</th>
                                                             <th>Mileage</th>
-                                                            <th>Description</th>
+                                                            <th>Remarks</th>
                                                         </tr>
                                                     </tfoot>
                                                     <tbody>
-                                                        {% for log in logs %}
+                                                        {% for movement in movements %}
                                                         <tr>
-                                                            <td>{{log.type}}</td>
-                                                            <td>{{log.date}}</td>
-                                                            <td>{{log.mileage}}</td>
-                                                            <td>{{log.description}}</td>
+                                                            <td>{{movement.date}}</td>
+                                                            <td>{{movement.driver}}</td>
+                                                            <td>{{movement.starting_point}}</td>
+                                                            <td>{{movement.mileage}}</td>
+                                                            <td>{{movement.destination}}</td>
+                                                            <td>{{movement.remarks}}</td>
                                                         </tr>
                                                         {% endfor %}
                                                         

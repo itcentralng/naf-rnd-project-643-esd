@@ -9,13 +9,19 @@ from app.vehiclelog.model import Vehiclelog
 with app.app_context():
 
     # TO CLEAR ALL LOGBOOK UNCOMMENT NEXT LINE AND RUN THIS FILE
-    Vehiclelog.query.delete()
+    # Vehiclelog.query.delete()
 
     # TO CREATE A USER UNCOMMENT THE NEXT LINE AND RUN THIS FILE
     try:
         User.create('admin@email.com', 'password', 'admin')
     except:
         pass
+
+    # SET PHONE FOR MTOs WITH MISSING PHONE
+    user = User.get_by_id(2)
+    if user.email == 'mto@email.com':
+        user.phone = "+2348088885123"
+        user.update()
 
     # TO CREATE A LOCATIONS UNCOMMENT THE NEXT 2 LINES AND RUN THIS FILE
     Location.query.delete()

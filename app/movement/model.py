@@ -2,13 +2,15 @@ from app import db
 from app.alert.model import Alert
 from app.vehicle.model import Vehicle
 
-class Vehiclelog(db.Model):
+class Movement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'))
+    date = db.Column(db.DateTime)
+    driver = db.Column(db.String)
+    starting_point = db.Column(db.String)
     mileage = db.Column(db.Integer)
-    type = db.Column(db.String)
-    description = db.Column(db.String)
-    date = db.Column(db.DateTime, default=db.func.now())
+    destination = db.Column(db.String)
+    remarks = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now())
     is_deleted = db.Column(db.Boolean, default=False)
@@ -17,12 +19,13 @@ class Vehiclelog(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def update(self, vehicle_id=None, mileage=None, type=None, description=None, date=None):
-        self.vehicle_id = vehicle_id or self.vehicle_id
-        self.mileage = mileage or self.mileage
-        self.type = type or self.type
-        self.description = description or self.description
+    def update(self, date=None, driver=None, starting_point=None, mileage=None, destination=None, remarks=None):
         self.date = date or self.date
+        self.driver = driver or self.driver
+        self.starting_point = starting_point or self.starting_point
+        self.mileage = mileage or self.mileage
+        self.destination = destination or self.destination
+        self.remarks = remarks or self.remarks
         self.updated_at = db.func.now()
         db.session.commit()
     
@@ -44,9 +47,10 @@ class Vehiclelog(db.Model):
         return cls.query.filter_by(is_deleted=False, vehicle_id=vehicle_id).all()
     
     @classmethod
-    def create(cls, vehicle_id, mileage, type, description, date):
-        vehiclelog = cls(vehicle_id=vehicle_id, mileage=mileage, type=type, description=description, date=date)
-        vehiclelog.save()
+    def create(cls, vehicle_id, date, driver, starting_point, mileage, destination, remarks):
+        movement = cls(vehicle_id=vehicle_id, date=date, driver=driver, starting_point=starting_point, mileage=mileage, destination=destination, remarks=remarks)
+        movement.save()
+
         vehicle = Vehicle.get_by_id(vehicle_id)
         alert = Alert.get_by_vehicle_id(vehicle_id)
         vehicle.mileage = vehicle.mileage or 0
@@ -55,7 +59,5 @@ class Vehiclelog(db.Model):
         
         alert.current_mileage = alert.current_mileage or 0
         alert.current_mileage += mileage
-        if type.lower() == 'preventive':
-            alert.current_mileage = 0
         alert.update()
-        return vehiclelog
+        return movement

@@ -40,6 +40,8 @@ from app.vehiclelog.controller import bp as vehiclelog_bp
 app.register_blueprint(vehiclelog_bp)
 from app.alert.controller import bp as alert_bp
 app.register_blueprint(alert_bp)
+from app.movement.controller import bp as movement_bp
+app.register_blueprint(movement_bp)
 
 # Error handlers
 # from .error_handlers import *

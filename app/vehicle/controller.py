@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template
 from app.alert.model import Alert
+from app.movement.model import Movement
 from app.route_guard import auth_required
 from flask_login import current_user
 
@@ -15,7 +16,7 @@ bp = Blueprint('vehicle', __name__)
 
 @bp.post('/vehicle')
 def create_vehicle():
-    mileage = request.form.get('mileage')
+    mileage = request.form.get('mileage', type=int)
     lifespan = request.form.get('lifespan')
     make = request.form.get('make')
     model = request.form.get('model')
@@ -48,8 +49,9 @@ def get_vehicle(id):
         "Conditioning Monitoring"
     ]
     logs = Vehiclelog.get_by_vehicle_id(id)
+    movements = Movement.get_by_vehicle_id(id)
     alert = Alert.get_by_vehicle_id(id)
-    return render_template('mto-single-vehicle.html', vehicle=vehicle, maintenance=maintenance, logs=logs, alert=alert)
+    return render_template('mto-single-vehicle.html', vehicle=vehicle, maintenance=maintenance, logs=logs, alert=alert, movements=movements)
 
 @bp.post('/vehicle/allocate/<int:id>')
 def allocate_vehicle(id):
@@ -65,7 +67,7 @@ def update_vehicle(id):
     vehicle = Vehicle.get_by_id(id)
     if vehicle is None:
         return {'message': 'Vehicle not found'}, 404
-    mileage = request.form.get('mileage')
+    mileage = request.form.get('mileage', type=int)
     lifespan = request.form.get('lifespan')
     make = request.form.get('make')
     model = request.form.get('model')
@@ -112,7 +114,8 @@ def get_vehicles():
         allocated = Vehicleallocation.get_all()
         return render_template('admin-vehicles.html', allocated=allocated, unallocated=unallocated)
     allocated = Vehicleallocation.get_all_by_unit_id(current_user.unit_id)
-    return render_template('mto-vehicles.html', allocated=allocated)
+    unit = Unit.get_by_id(current_user.unit_id)
+    return render_template('mto-vehicles.html', allocated=allocated, unit=unit)
 
 @bp.get('/statistics')
 def get_vehicles_statistics():

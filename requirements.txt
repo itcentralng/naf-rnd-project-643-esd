@@ -1,3 +1,4 @@
+africastalking==1.2.7
 alembic==1.13.1
 amqp==5.2.0
 bcrypt==4.1.2
@@ -10,6 +11,7 @@ click==8.1.7
 click-didyoumean==0.3.1
 click-plugins==1.1.1
 click-repl==0.3.0
+contextlib2==21.6.0
 Flask==3.0.2
 Flask-Cors==4.0.0
 Flask-JWT-Extended==4.6.0
@@ -39,6 +41,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 requests==2.31.0
 rich==13.7.1
+schema==0.7.5
 shellingham==1.5.4
 six==1.16.0
 SQLAlchemy==2.0.29

@@ -106,6 +106,55 @@ $(document).on('click', '#addLog', function(event){
                 form.reset();
                 $('#logbookTable').load(location.href+" #logbookTable>*","");
                 $('#information').load(location.href+" #information>*","");
+                $('#alertForm').load(location.href+" #alertForm>*","");
+            }
+        });
+});
+
+$(document).on('click', '#addMovement', function(event){
+    event.preventDefault();
+
+        let vehicleId = $(this).attr('vehicleId');
+
+        form = $('#movementForm')[0]
+        req = $.ajax({
+            url:'/movement/'+vehicleId,
+            type:'post',
+            contentType: false,
+            processData: false,
+            data: new FormData(form)
+        });
+        req.done(function(res){
+            if (res.error){
+                alert(res.error);
+            }else{
+                alert('Vehicle Log Saved Successfully');
+                form.reset();
+                $('#tableMovement').load(location.href+" #tableMovement>*","");
+                $('#information').load(location.href+" #information>*","");
+                $('#alertForm').load(location.href+" #alertForm>*","");
+            }
+        });
+});
+
+$(document).on('click', '#setAlert', function(event){
+    event.preventDefault();
+
+        let vehicleId = $(this).attr('vehicleId');
+
+        form = $('#alertForm')[0]
+        req = $.ajax({
+            url:'/alert/'+vehicleId,
+            type:'post',
+            contentType: false,
+            processData: false,
+            data: new FormData(form)
+        });
+        req.done(function(res){
+            if (res.error){
+                alert(res.error);
+            }else{
+                alert('Alert updated Successfully');
             }
         });
 });

@@ -1,4 +1,7 @@
 from app import db
+from app.user.model import User
+from app.vehicle.model import Vehicleallocation
+from helpers.sms import SMS
 
 class Alert(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -30,9 +33,13 @@ class Alert(db.Model):
     
     def trigger_alert(self):
         if self.current_mileage >= self.mileage_limit and self.status == 'active':
-            # SEND SMS HERE
-            self.status = 'inactive'
-            pass
+            allocation = Vehicleallocation.get_by_vehicle_id(self.vehicle_id)
+            users = User.get_all_by_unit_id(allocation.unit_id)
+            message = f"This is to notify you that the current mileage on the vehicle - {allocation.vehicle.make} {allocation.vehicle.model} {allocation.vehicle.year} has reached {self.current_mileage} and needs to be serviced!"
+            sms = SMS()
+            for user in users:
+                if user.role == 'mto' and user.phone:
+                    sms.send(user.phone, message)
 
     @classmethod
     def get_by_id(cls, id):
@@ -48,6 +55,9 @@ class Alert(db.Model):
     
     @classmethod
     def create(cls, vehicle_id, mileage_limit, current_mileage, status):
-        alert = cls(vehicle_id=vehicle_id, mileage_limit=mileage_limit, current_mileage=current_mileage, status=status)
-        alert.save()
+        alert = cls.get_by_vehicle_id(vehicle_id)
+        if not alert:
+            alert = cls(vehicle_id=vehicle_id, mileage_limit=mileage_limit, current_mileage=current_mileage, status=status)
+            alert.save()
+        alert.update(vehicle_id, mileage_limit, current_mileage, status)
         return alert
