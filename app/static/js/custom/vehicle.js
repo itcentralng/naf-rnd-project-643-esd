@@ -3,11 +3,15 @@ $(document).on('click', '#addBulkVehicles', function(event){
     let file = $('#file').val()
     
     let unitId = $(this).attr('unitId')
+    let url = '/vehicle/bulk'
+    if (unitId){
+        url += '/'+unitId
+    }
     
     if (file){
         form = $('#bulkForm')[0]
         req = $.ajax({
-            url:'/vehicle/bulk/'+unitId,
+            url:url,
             type:'post',
             contentType: false,
             processData: false,
@@ -20,6 +24,7 @@ $(document).on('click', '#addBulkVehicles', function(event){
                 alert('Vehicles Added Successfully');
                 // form.reset();
                 $('#allocated').load(location.href+" #allocated>*","");
+                $('#unallocated').load(location.href+" #unallocated>*","");
             }
         });
     }else{

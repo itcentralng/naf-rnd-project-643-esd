@@ -35,7 +35,7 @@ def create_vehicle():
     return VehicleSchema().dump(vehicle), 201
 
 @bp.post('/vehicle/bulk/<int:unit_id>')
-def create_bulk_vehicles(unit_id):
+def create_bulk_vehicles_unit(unit_id):
     file = request.files.get('file')
     data = get_vehicles_from_csv(file)
     for item in data:
@@ -45,6 +45,17 @@ def create_bulk_vehicles(unit_id):
             vehicle = Vehicle.create(mileage, lifespan, make, model, type, trim, year, chassis_no, engine_no, supplier, contract_reference, date, remarks)
             allocation = Vehicleallocation.create(vehicle.id, unit_id)
             allocation.accept()
+    return {"message":"Vehicles added successfully!"}
+
+@bp.post('/vehicle/bulk')
+def create_bulk_vehicles():
+    file = request.files.get('file')
+    data = get_vehicles_from_csv(file)
+    for item in data:
+        make, model, type, trim, year, lifespan, mileage, chassis_no, engine_no, supplier, contract_reference, date, remarks = item
+        if make and date:
+            date = datetime.strptime(date, "%m/%d/%Y")
+            Vehicle.create(mileage, lifespan, make, model, type, trim, year, chassis_no, engine_no, supplier, contract_reference, date, remarks)
     return {"message":"Vehicles added successfully!"}
 
 @bp.get('/vehicle/<int:id>')
