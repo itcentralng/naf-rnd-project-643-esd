@@ -7,6 +7,7 @@ class Vehicle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     allocation = db.relationship('Vehicleallocation', viewonly=True)
     lifespan = db.Column(db.Integer)
+    mileage = db.Column(db.Integer)
     make = db.Column(db.String)
     model = db.Column(db.String)
     type = db.Column(db.String)
@@ -26,7 +27,8 @@ class Vehicle(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def update(self, lifespan=None, make=None, model=None, type=None, trim=None, year=None, chassis_no=None, engine_no=None, supplier=None, contract_reference=None, date=None, remarks=None):
+    def update(self, mileage=None, lifespan=None, make=None, model=None, type=None, trim=None, year=None, chassis_no=None, engine_no=None, supplier=None, contract_reference=None, date=None, remarks=None):
+        self.mileage = mileage or self.mileage
         self.lifespan = lifespan or self.lifespan
         self.make = make or self.make
         self.model = model or self.model
@@ -75,8 +77,8 @@ class Vehicle(db.Model):
         return cls.query.filter(cls.is_deleted==False, ~cls.allocation.any()).all()
     
     @classmethod
-    def create(cls, lifespan, make, model, type, trim, year, chassis_no, engine_no, supplier, contract_reference, date, remarks):
-        vehicle = cls(lifespan=lifespan, make=make, model=model, type=type, trim=trim, year=year, chassis_no=chassis_no, engine_no=engine_no, supplier=supplier, contract_reference=contract_reference, date=date, remarks=remarks)
+    def create(cls, mileage, lifespan, make, model, type, trim, year, chassis_no, engine_no, supplier, contract_reference, date, remarks):
+        vehicle = cls(mileage=mileage, lifespan=lifespan, make=make, model=model, type=type, trim=trim, year=year, chassis_no=chassis_no, engine_no=engine_no, supplier=supplier, contract_reference=contract_reference, date=date, remarks=remarks)
         vehicle.save()
         return vehicle
 

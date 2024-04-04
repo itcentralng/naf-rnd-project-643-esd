@@ -42,12 +42,13 @@ def reset_password():
 def register(unit_id):
     name = request.form.get('name')
     email = request.form.get('email')
+    phone = request.form.get('phone')
     password = request.form.get('password')
     role = request.form.get('role', 'mto')
     user = User.get_by_email(email)
     if user is not None:
         return {'message': 'User already exists'}, 400
-    user = User.create(name, email, password, role, unit_id)
+    user = User.create(name, phone, email, password, role, unit_id)
     if user is not None:
         return {'message': 'User created'}, 201
     return {'message': 'User not created'}, 400

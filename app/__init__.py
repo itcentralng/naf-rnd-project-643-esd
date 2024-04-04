@@ -36,6 +36,10 @@ from app.location.controller import bp as location_bp
 app.register_blueprint(location_bp)
 from app.command.controller import bp as command_bp
 app.register_blueprint(command_bp)
+from app.vehiclelog.controller import bp as vehiclelog_bp
+app.register_blueprint(vehiclelog_bp)
+from app.alert.controller import bp as alert_bp
+app.register_blueprint(alert_bp)
 
 # Error handlers
 # from .error_handlers import *

@@ -1,4 +1,5 @@
 from flask import Blueprint, request, render_template
+from app.alert.model import Alert
 from app.route_guard import auth_required
 from flask_login import current_user
 
@@ -7,12 +8,14 @@ from datetime import datetime
 from app.unit.model import Unit
 from app.vehicle.model import *
 from app.vehicle.schema import *
+from app.vehiclelog.model import Vehiclelog
 from helpers.color_maker import make_color
 
 bp = Blueprint('vehicle', __name__)
 
 @bp.post('/vehicle')
 def create_vehicle():
+    mileage = request.form.get('mileage')
     lifespan = request.form.get('lifespan')
     make = request.form.get('make')
     model = request.form.get('model')
@@ -26,7 +29,7 @@ def create_vehicle():
     date = request.form.get('date')
     date = datetime.fromisoformat(date) if date else datetime.now()
     remarks = request.form.get('remark')
-    vehicle = Vehicle.create(lifespan, make, model, type, trim, year, chassis_no, engine_no, supplier, contract_reference, date, remarks)
+    vehicle = Vehicle.create(mileage, lifespan, make, model, type, trim, year, chassis_no, engine_no, supplier, contract_reference, date, remarks)
     return VehicleSchema().dump(vehicle), 201
 
 @bp.get('/vehicle/<int:id>')
@@ -34,8 +37,19 @@ def get_vehicle(id):
     vehicle = Vehicle.get_by_id(id)
     if vehicle is None:
         return {'message': 'Vehicle not found'}, 404
-    units = Unit.get_all()
-    return render_template('single-vehicle.html', vehicle=vehicle, units=units)
+    if current_user.role == 'admin':
+        units = Unit.get_all()
+        return render_template('admin-single-vehicle.html', vehicle=vehicle, units=units)
+    maintenance = [
+        "Reactive",
+        "Preventive",
+        "Predictive",
+        "Proactive",
+        "Conditioning Monitoring"
+    ]
+    logs = Vehiclelog.get_by_vehicle_id(id)
+    alert = Alert.get_by_vehicle_id(id)
+    return render_template('mto-single-vehicle.html', vehicle=vehicle, maintenance=maintenance, logs=logs, alert=alert)
 
 @bp.post('/vehicle/allocate/<int:id>')
 def allocate_vehicle(id):
@@ -51,6 +65,7 @@ def update_vehicle(id):
     vehicle = Vehicle.get_by_id(id)
     if vehicle is None:
         return {'message': 'Vehicle not found'}, 404
+    mileage = request.form.get('mileage')
     lifespan = request.form.get('lifespan')
     make = request.form.get('make')
     model = request.form.get('model')
@@ -63,7 +78,7 @@ def update_vehicle(id):
     contract_reference = request.form.get('contract_reference')
     date = request.form.get('date')
     remarks = request.form.get('remark')
-    vehicle.update(lifespan, make, model, type, trim, year, chassis_no, engine_no, supplier, contract_reference, date, remarks)
+    vehicle.update(mileage, lifespan, make, model, type, trim, year, chassis_no, engine_no, supplier, contract_reference, date, remarks)
     return VehicleSchema().dump(vehicle), 200
 
 @bp.delete('/vehicle/<int:id>')

@@ -1,0 +1,360 @@
+{% include 'header.html' %}
+    <body class="sb-nav-fixed">
+        {% include 'nav.html' %}
+        <div id="layoutSidenav">
+            {% include 'siderbar.html' %}
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid">
+                        <h1 class="mt-4">Vehicles</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active"></li>
+                        </ol>
+                        <div class="row">
+                            
+                            <div class="col-xl-4">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area mr-1"></i>
+                                        Mileage Alert
+                                    </div>
+                                    <div class="card-body">
+                                    <form method="POST" id="alertForm">
+                                        <div class="form-row">
+                                            
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="mileage">Mileage Limit</label>
+                                                    <input required class="form-control py-2" id="mileage_limit" name="mileage_limit" type="number" placeholder="Mileage Limit" value="{{alert.mileage_limit}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="mileage">Current Mileage</label>
+                                                    <input required class="form-control py-2" id="current_mileage" name="current_mileage" type="number" placeholder="Current Mileage" value="{{alert.current_mileage}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="unit">Alert Status</label>
+                                                    <select required class="form-control py-2" name="status" id="status">
+                                                            {% for s in ['active', 'inactive'] %}
+                                                            {% if alert.status == s %}
+                                                        <option selected value="{{s}}">{{s}}</option>
+                                                            {% else %}
+                                                        <option value="{{s}}">{{s}}</option>
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="form-group mt-4 mb-0"><button class="btn btn-primary btn-block" id="setAlert" vehicleId="{{vehicle.id}}">Update</button></div>
+                                    </form>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-8">
+                                <div class="card mb-4" id="information">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-bar mr-1"></i>
+                                        Information
+                                    </div>
+                                    <div class="card-body">
+                                    <form method="POST" id="vehicleForm">
+                                        <div class="form-row">
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="make">Make</label>
+                                                    <input required class="form-control py-2" id="make" name="make" type="text" placeholder="Make" value="{{vehicle.make}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="model">Model</label>
+                                                    <input required class="form-control py-2" id="model" name="model" type="text" placeholder="Model" value="{{vehicle.model}}"/>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="type">Type</label>
+                                                    <input required class="form-control py-2" id="type" name="type" type="text" placeholder="Type" value="{{vehicle.type}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="trim">Trim</label>
+                                                    <input required class="form-control py-2" id="trim" name="trim" type="text" placeholder="Trim" value="{{vehicle.trim}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="year">Year</label>
+                                                    <input required class="form-control py-2" id="year" name="year" type="number" placeholder="Year" value="{{vehicle.year}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="mileage">Mileage</label>
+                                                    <input required class="form-control py-2" id="mileage" name="mileage" type="number" placeholder="Mileage" value="{{vehicle.mileage}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="lifespan">Lifespan</label>
+                                                    <input required class="form-control py-2" id="lifespan" name="lifespan" type="number" placeholder="Lifespan" value="{{vehicle.lifespan}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="lifespan">Remaining Life</label>
+                                                    <input required class="form-control py-2" id="remainingLife" name="remainingLife" type="number" placeholder="remainingLife" value="{{vehicle.remaining_life()}}" readonly />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="chassis_no">Chassis N0</label>
+                                                    <input required class="form-control py-2" id="chassis_no" name="chassis_no" type="text" placeholder="Chassis N0" value="{{vehicle.chassis_no}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="chassis_no">Engine N0</label>
+                                                    <input required class="form-control py-2" id="engine_no" name="engine_no" type="text" placeholder="Engine N0" value="{{vehicle.engine_no}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="chassis_no">Supplier</label>
+                                                    <input required class="form-control py-2" id="supplier" name="supplier" type="text" placeholder="Supplier" value="{{vehicle.supplier}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="chassis_no">Contract Reference</label>
+                                                    <input required class="form-control py-2" id="contract_reference" name="contract_reference" type="text" placeholder="Contract Reference" value="{{vehicle.contract_reference}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="chassis_no">Date</label>
+                                                    <input required class="form-control py-2" id="date" name="date" type="date" placeholder="Date" value="{{vehicle.date}}" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="chassis_no">Remarks</label>
+                                                    <input required class="form-control py-2" id="remark" name="remark" type="text" placeholder="Remarks" value="{{vehicle.remarks}}"/>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </form>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- LogBook -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        Add Log
+                                    </div>
+
+                                    <div class="card-body">
+                                        <form method="POST" id="logForm">
+                                            <div class="form-row">
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="date">Date & Time</label>
+                                                        <input required class="form-control py-2" id="date" name="date" type="datetime-local"/>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="mileage">Mileage</label>
+                                                        <input required class="form-control py-2" id="mileage" name="mileage" type="number" placeholder="Mileage"/>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="unit">Type</label>
+                                                        <select required class="form-control py-2" name="type" id="type">
+                                                            {% for m in maintenance %}
+                                                            <option selected value="{{m}}">{{m}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="description">Description</label>
+                                                        <textarea required class="form-control py-2" id="description" name="description" placeholder="description"></textarea>
+                                                    </div>
+                                                </div>
+
+                                                
+                                            </div>
+                                            <div class="form-group mt-4 mb-0"><button class="btn btn-primary btn-block" id="addLog" vehicleId="{{vehicle.id}}">Submit</button></div>
+                                        </form>
+                                    </div>
+                                    
+                                </div>
+                                <div class="card mb-4" id="logbookTable">
+                                    <div class="card-header">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" id="logTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Type</th>
+                                                            <th>Date</th>
+                                                            <th>Mileage</th>
+                                                            <th>Description</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th>Type</th>
+                                                            <th>Date</th>
+                                                            <th>Mileage</th>
+                                                            <th>Description</th>
+                                                        </tr>
+                                                    </tfoot>
+                                                    <tbody>
+                                                        {% for log in logs %}
+                                                        <tr>
+                                                            <td>{{log.type}}</td>
+                                                            <td>{{log.date}}</td>
+                                                            <td>{{log.mileage}}</td>
+                                                            <td>{{log.description}}</td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <!-- Movement -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        Add Movement
+                                    </div>
+
+                                    <div class="card-body">
+                                        <form method="POST" id="vehicleForm">
+                                            <div class="form-row">
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="date">Date & Time</label>
+                                                        <input required class="form-control py-2" id="date" name="date" type="datetime-local"/>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="mileage">Mileage</label>
+                                                        <input required class="form-control py-2" id="mileage" name="mileage" type="number" placeholder="Mileage"/>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="unit">Type</label>
+                                                        <select required class="form-control py-2" name="type" id="type">
+                                                            {% for m in maintenance %}
+                                                            <option selected value="{{m}}">{{m}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="description">Description</label>
+                                                        <textarea required class="form-control py-2" id="description" name="description" placeholder="description"></textarea>
+                                                    </div>
+                                                </div>
+
+                                                
+                                            </div>
+                                            <div class="form-group mt-4 mb-0"><button class="btn btn-primary btn-block" id="addMovement" >Submit</button></div>
+                                        </form>
+                                    </div>
+                                    
+                                </div>
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" id="movementTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Type</th>
+                                                            <th>Date</th>
+                                                            <th>Mileage</th>
+                                                            <th>Description</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th>Type</th>
+                                                            <th>Date</th>
+                                                            <th>Mileage</th>
+                                                            <th>Description</th>
+                                                        </tr>
+                                                    </tfoot>
+                                                    <tbody>
+                                                        {% for log in logs %}
+                                                        <tr>
+                                                            <td>{{log.type}}</td>
+                                                            <td>{{log.date}}</td>
+                                                            <td>{{log.mileage}}</td>
+                                                            <td>{{log.description}}</td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+{% include 'footer.html' %}
+<script src = "{{url_for('static',filename='js/custom/main.js')}}"></script>
+<script src="{{url_for('static', filename='js/custom/vehicle.js')}}"></script>

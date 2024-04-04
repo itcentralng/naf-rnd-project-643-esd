@@ -12,3 +12,7 @@ FLASK SETUP LOG
 2024-04-03 05:16:37: Blueprint unit added successfully
 2024-04-03 05:18:25: Blueprint location added successfully
 2024-04-03 05:18:34: Blueprint command added successfully
+2024-04-04 00:10:41: Blueprint logbook added successfully
+2024-04-04 00:13:03: Blueprint logbook removed successfully
+2024-04-04 00:13:23: Blueprint vehiclelog added successfully
+2024-04-04 01:49:56: Blueprint alert added successfully

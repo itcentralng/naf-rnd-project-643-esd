@@ -16,6 +16,7 @@ class User(db.Model, UserMixin):
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'))
     unit = db.relationship('Unit')
     email = db.Column(db.String, unique=True, nullable=True)
+    phone = db.Column(db.String, unique=True, nullable=True)
     password = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=db.func.now())
     updated_at = db.Column(db.DateTime, nullable=False, default=db.func.now())
@@ -75,8 +76,8 @@ class User(db.Model, UserMixin):
         return User.query.filter(User.email==email).first()
     
     @classmethod
-    def create(cls, name, email, password, role, unit_id):
-        user = cls(name=name, email=email, password=password, role=role, unit_id=unit_id)
+    def create(cls, name, phone, email, password, role, unit_id):
+        user = cls(name=name, phone=phone, email=email, password=password, role=role, unit_id=unit_id)
         user.hash_password()
         user.save()
         return user

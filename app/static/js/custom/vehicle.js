@@ -84,3 +84,28 @@ $(document).on('click', '#addAllocation', function(event){
             }
         });
 });
+
+$(document).on('click', '#addLog', function(event){
+    event.preventDefault();
+
+        let vehicleId = $(this).attr('vehicleId');
+
+        form = $('#logForm')[0]
+        req = $.ajax({
+            url:'/vehiclelog/'+vehicleId,
+            type:'post',
+            contentType: false,
+            processData: false,
+            data: new FormData(form)
+        });
+        req.done(function(res){
+            if (res.error){
+                alert(res.error);
+            }else{
+                alert('Vehicle Log Saved Successfully');
+                form.reset();
+                $('#logbookTable').load(location.href+" #logbookTable>*","");
+                $('#information').load(location.href+" #information>*","");
+            }
+        });
+});
