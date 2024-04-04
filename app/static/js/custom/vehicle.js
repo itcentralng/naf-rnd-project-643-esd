@@ -1,3 +1,32 @@
+$(document).on('click', '#addBulkVehicles', function(event){
+    event.preventDefault();
+    let file = $('#file').val()
+    
+    let unitId = $(this).attr('unitId')
+    
+    if (file){
+        form = $('#bulkForm')[0]
+        req = $.ajax({
+            url:'/vehicle/bulk/'+unitId,
+            type:'post',
+            contentType: false,
+            processData: false,
+            data: new FormData(form)
+        });
+        req.done(function(res){
+            if (res.error){
+                alert(res.error);
+            }else{
+                alert('Vehicles Added Successfully');
+                // form.reset();
+                $('#allocated').load(location.href+" #allocated>*","");
+            }
+        });
+    }else{
+        alert('Please enter required fields')
+    }
+});
+
 $(document).on('click', '#addVehicle', function(event){
     event.preventDefault();
     let lifespan = $('#lifespan').val()

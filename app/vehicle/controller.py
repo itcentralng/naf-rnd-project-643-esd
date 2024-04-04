@@ -11,6 +11,7 @@ from app.vehicle.model import *
 from app.vehicle.schema import *
 from app.vehiclelog.model import Vehiclelog
 from helpers.color_maker import make_color
+from helpers.csv import get_vehicles_from_csv
 
 bp = Blueprint('vehicle', __name__)
 
@@ -32,6 +33,19 @@ def create_vehicle():
     remarks = request.form.get('remark')
     vehicle = Vehicle.create(mileage, lifespan, make, model, type, trim, year, chassis_no, engine_no, supplier, contract_reference, date, remarks)
     return VehicleSchema().dump(vehicle), 201
+
+@bp.post('/vehicle/bulk/<int:unit_id>')
+def create_bulk_vehicles(unit_id):
+    file = request.files.get('file')
+    data = get_vehicles_from_csv(file)
+    for item in data:
+        make, model, type, trim, year, lifespan, mileage, chassis_no, engine_no, supplier, contract_reference, date, remarks = item
+        if make and date:
+            date = datetime.strptime(date, "%m/%d/%Y")
+            vehicle = Vehicle.create(mileage, lifespan, make, model, type, trim, year, chassis_no, engine_no, supplier, contract_reference, date, remarks)
+            allocation = Vehicleallocation.create(vehicle.id, unit_id)
+            allocation.accept()
+    return {"message":"Vehicles added successfully!"}
 
 @bp.get('/vehicle/<int:id>')
 def get_vehicle(id):
