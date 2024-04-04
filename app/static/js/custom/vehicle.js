@@ -22,7 +22,7 @@ $(document).on('click', '#addBulkVehicles', function(event){
                 alert(res.error);
             }else{
                 alert('Vehicles Added Successfully');
-                // form.reset();
+                form.reset();
                 $('#allocated').load(location.href+" #allocated>*","");
                 $('#unallocated').load(location.href+" #unallocated>*","");
             }
@@ -88,8 +88,8 @@ $(document).on('click', '#updateVehicle', function(event){
                 alert(res.error);
             }else{
                 alert('Vehicle Updated Successfully');
-                form.reset();
                 $('#unallocated').load(location.href+" #unallocated>*","");
+                $('#allocated').load(location.href+" #allocated>*","");
             }
         });
 });

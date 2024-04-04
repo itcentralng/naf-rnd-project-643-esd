@@ -18,4 +18,7 @@ def view_dashboard():
         units = Unit.get_all()
         return render_template('admin-dashboard.html', unallocated=unallocated, allocated=allocated, units=units)
     allocated = Vehicleallocation.get_all_by_unit_id(current_user.unit_id)
-    return render_template('mto-dashboard.html', allocated=allocated)
+    serviceable = [i for i in allocated if i.vehicle.service == 'Serviceable']
+    unserviceable = [i for i in allocated if i.vehicle.service == 'Unserviceable']
+    ber = [i for i in allocated if i.vehicle.service == 'Beyond Economic Repairs']
+    return render_template('mto-dashboard.html', allocated=allocated, ber=ber, serviceable=serviceable, unserviceable=unserviceable)

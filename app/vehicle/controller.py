@@ -105,7 +105,8 @@ def update_vehicle(id):
     contract_reference = request.form.get('contract_reference')
     date = request.form.get('date')
     remarks = request.form.get('remark')
-    vehicle.update(mileage, lifespan, make, model, type, trim, year, chassis_no, engine_no, supplier, contract_reference, date, remarks)
+    service = request.form.get('service')
+    vehicle.update(mileage, lifespan, make, model, type, trim, year, chassis_no, engine_no, supplier, contract_reference, date, remarks, service)
     return VehicleSchema().dump(vehicle), 200
 
 @bp.delete('/vehicle/<int:id>')

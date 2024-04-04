@@ -19,6 +19,7 @@ class Vehicle(db.Model):
     contract_reference = db.Column(db.String)
     date = db.Column(db.DateTime)
     remarks = db.Column(db.String)
+    service = db.Column(db.String, default='Serviceable')
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now())
     is_deleted = db.Column(db.Boolean, default=False)
@@ -27,7 +28,7 @@ class Vehicle(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def update(self, mileage=None, lifespan=None, make=None, model=None, type=None, trim=None, year=None, chassis_no=None, engine_no=None, supplier=None, contract_reference=None, date=None, remarks=None):
+    def update(self, mileage=None, lifespan=None, make=None, model=None, type=None, trim=None, year=None, chassis_no=None, engine_no=None, supplier=None, contract_reference=None, date=None, remarks=None, service=None):
         self.mileage = mileage or self.mileage
         self.lifespan = lifespan or self.lifespan
         self.make = make or self.make
@@ -41,6 +42,7 @@ class Vehicle(db.Model):
         self.contract_reference = contract_reference or self.contract_reference
         self.date = date or self.date
         self.remarks = remarks or self.remarks
+        self.service = service or self.service
         self.updated_at = db.func.now()
         db.session.commit()
     
